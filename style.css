@@ -64,7 +64,6 @@ html, body {
     transform: rotate(15deg); margin: 0 4.5px;
 }
 
-/* Bilah Pencarian "Cari" */
 .rbx-header-center { flex-grow: 1; max-width: 580px; margin: 0 20px; position: relative; }
 .rbx-search-box { position: relative; width: 100%; display: flex; align-items: center; }
 .rbx-search-input {
@@ -85,7 +84,6 @@ html, body {
 
 .rbx-header-right { display: flex; align-items: center; gap: 12px; }
 
-/* Profil Jirun: Non-aktif */
 .rbx-user-chip-disabled {
     display: flex; align-items: center; gap: 9px;
     padding: 4px 6px; cursor: default; user-select: none; pointer-events: none;
@@ -98,7 +96,6 @@ html, body {
 .rbx-avatar-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rbx-user-chip-disabled span { font-weight: 700; font-size: 15px; color: var(--text-primary); }
 
-/* Ikon Robux: Non-aktif */
 .rbx-robux-disabled {
     width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
@@ -106,7 +103,6 @@ html, body {
 }
 .rbx-robux-svg { width: 22px; height: 22px; fill: #191B1D; }
 
-/* Ikon Lonceng: Satu-satunya yang bisa diklik */
 .rbx-bell-clickable {
     width: 38px; height: 38px;
     display: flex; align-items: center; justify-content: center;
@@ -118,13 +114,11 @@ html, body {
     stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Bagian Hijau Memanjang ke Bawah */
 .rbx-greenscreen-content {
     width: 100%; min-height: 2200px;
     background-color: #00FF00; display: block;
 }
 
-/* Dropdown Hasil Pencarian */
 #header-search-dropdown {
     display: none; position: absolute;
     top: calc(100% + 6px); left: 0; right: 0;
@@ -149,7 +143,7 @@ html, body {
 .hs-name { font-weight: 700; font-size: 14px; color: #000; }
 .hs-user { font-size: 12px; color: #666; font-weight: 600; }
 
-/* ===== POPUP PROFIL TARGET KANAN (LEBAR 520px) ===== */
+/* ===== POPUP PROFIL TARGET LEBAR 520px ===== */
 #target-photo-popup {
     position: fixed; inset: 0; z-index: 99990;
     display: none; justify-content: flex-end;
@@ -279,7 +273,7 @@ html, body {
 .pp-menu-item:hover { background: #f2f4f7; }
 .pp-menu-item.active-action { color: #000; font-weight: 700; }
 
-/* SAAT INI MEMAKAI */
+/* SAAT INI MEMAKAI DENGAN HARGA ASLI */
 .pp-wearing { margin-top: 26px; }
 .pp-wearing-title { font-size: 21px; font-weight: 800; color: #111; margin-bottom: 14px; }
 .pp-wearing-row { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; }
@@ -302,7 +296,7 @@ html, body {
 }
 .pp-view-full:hover { background: #f7f9fa; border-color: #c5cbd0; }
 
-/* ===== MODAL KIRIM ROBUX (BERDAMPINGAN DENGAN TARGET / DOUBLE POPUP) ===== */
+/* ===== MODAL KIRIM ROBUX (DOUBLE POPUP) ===== */
 .modal-side-wrapper {
     display: none;
     position: fixed;
@@ -401,6 +395,38 @@ html, body {
 .settings-row-body { flex: 1; min-width: 0; }
 .settings-label { display: block; font-size: 11px; font-weight: 700; color: #8a8f96; margin-bottom: 4px; }
 .input-box { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 15px; outline: none; font-weight: 600; font-family: inherit; }
+
+/* ===== FORM KUNCI LOGIN KHUSUS MEMBER ===== */
+.auth-lock-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 999999;
+}
+.auth-card {
+    background: #ffffff; border-radius: 20px;
+    width: 380px; max-width: 90vw; padding: 32px 26px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center;
+    border: 1px solid #e5e7eb; animation: modalFadeIn 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.auth-badge-icon { font-size: 40px; margin-bottom: 12px; }
+.auth-title { font-size: 22px; font-weight: 900; color: #111; margin: 0 0 6px; }
+.auth-desc { font-size: 13.5px; color: #5b6770; margin: 0 0 20px; line-height: 1.4; }
+.auth-error-msg {
+    display: none; background: #fee2e2; color: #dc2626;
+    padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+    margin-bottom: 16px; text-align: left; border: 1px solid #fecaca;
+}
+.auth-input-group { text-align: left; margin-bottom: 14px; }
+.auth-input-group label {
+    display: block; font-size: 11px; font-weight: 800; color: #8a8f96;
+    letter-spacing: 0.5px; margin-bottom: 5px;
+}
+.auth-input-group .input-box {
+    width: 100%; padding: 12px 14px; border: 1.5px solid #dcdfe3;
+    border-radius: 10px; font-size: 15px; outline: none; transition: 0.2s;
+}
+.auth-input-group .input-box:focus { border-color: #111; }
 
 #pp-toast {
     position: fixed; bottom: 26px; left: 50%;
