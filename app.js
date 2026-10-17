@@ -33,7 +33,7 @@ function showLoginLockScreen() {
 
             <div class="auth-input-group">
                 <label>USERNAME</label>
-                <input type="text" id="login-user" class="input-box" placeholder="Contoh: asep" autocomplete="off">
+                <input type="text" id="login-user" class="input-box" placeholder="Contoh : Memek" autocomplete="off">
             </div>
 
             <div class="auth-input-group">
