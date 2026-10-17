@@ -680,7 +680,7 @@
 
             headerDropdown.classList.add('show');
             hsItems.innerHTML = '';
-            hsStatus.innerText = 'Mencari akun asli di server Roblox...';
+            hsStatus.innerText = '';
 
             if (!kw && !parsed.id) { hsHide(); return; }
 
@@ -709,7 +709,7 @@
             if (merged.length > 0) {
                 renderHsResultsFast(merged, !!exact);
             } else {
-                hsStatus.innerText = 'Akun tidak ditemukan di server Roblox.';
+                hsStatus.innerText = '';
             }
         }
 
@@ -726,7 +726,7 @@
         });
 
         function renderHsResultsFast(users, isExact) {
-            hsStatus.innerText = isExact ? '✓ Akun asli ditemukan' : users.length + ' hasil — klik untuk pilih';
+            hsStatus.innerText = isExact ? '' : users.length + ' hasil — klik untuk pilih';
 
             hsItems.innerHTML = users.map(u => {
                 const nm = (u.name || '').replace(/'/g, "\\'");
