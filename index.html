@@ -153,7 +153,7 @@
         .hs-name { font-weight: 700; font-size: 14px; color: #000; }
         .hs-user { font-size: 12px; color: #666; font-weight: 600; }
 
-        /* ===== POPUP PROFIL TARGET: DIPERLEBAR MENJADI 520px ===== */
+        /* ===== POPUP PROFIL TARGET LEBAR 520px ===== */
         #target-photo-popup {
             position: fixed; inset: 0; z-index: 99990;
             display: none; justify-content: flex-end;
@@ -186,27 +186,63 @@
         .photo-popup-close:hover { transform: scale(1.08); }
         .photo-popup-close svg { width: 22px; height: 22px; fill: #1b2a4a; }
 
-        /* AVATAR BERPUTAR 360° TERUS MENERUS */
+        /* ===== ANIMASI AVATAR MENOLEH KIRI-KANAN PERSIS SEPERTI VIDEO ===== */
         .pp-hero {
-            flex: 0 0 auto; height: 48vh; min-height: 300px;
+            flex: 0 0 auto; height: 48vh; min-height: 310px;
             background: radial-gradient(ellipse at 50% 35%, #f1f4f7 0%, #d8dfe6 65%, #cbd3dc 100%);
             display: flex; align-items: flex-end; justify-content: center;
-            padding: 30px 20px 0;
-            perspective: 1000px;
+            padding: 20px 20px 0;
+            perspective: 1100px;
             overflow: hidden;
+            position: relative;
         }
-        
-        @keyframes spinTurntable {
-            0%   { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
+
+        /* Gerakan Turntable Sway 3D alami: Kiri -> Depan -> Kanan -> Depan -> Kiri */
+        @keyframes robloxAvatarTurn {
+            0% {
+                transform: perspective(1000px) rotateY(-28deg) rotateX(1deg) translateY(0);
+            }
+            50% {
+                transform: perspective(1000px) rotateY(26deg) rotateX(0deg) translateY(-5px);
+            }
+            100% {
+                transform: perspective(1000px) rotateY(-28deg) rotateX(1deg) translateY(0);
+            }
+        }
+
+        @keyframes shadowPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(-50%) scale(0.92);
+                opacity: 0.6;
+            }
         }
 
         .pp-hero img {
             max-height: 94%; max-width: 82%; object-fit: contain;
-            filter: drop-shadow(0 16px 20px rgba(0,0,0,.22));
-            animation: spinTurntable 7s linear infinite;
+            filter: drop-shadow(0 14px 18px rgba(0,0,0,.24));
+            animation: robloxAvatarTurn 5s ease-in-out infinite; /* Sesuai durasi video */
             transform-style: preserve-3d;
-            transform-origin: center center;
+            transform-origin: bottom center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Bayangan lantai di bawah kaki karakter */
+        .pp-hero-shadow {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 22px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.08) 55%, transparent 75%);
+            border-radius: 50%;
+            animation: shadowPulse 5s ease-in-out infinite;
+            z-index: 1;
         }
         .pp-hero-fallback { font-size: 72px; font-weight: 800; color: #9aa4ad; margin-bottom: 40px; }
 
@@ -289,7 +325,7 @@
         }
         .pp-view-full:hover { background: #f7f9fa; border-color: #c5cbd0; }
 
-        /* ===== MODAL KIRIM ROBUX & ALUR PINDAH KE KANAN (FOTO 2) ===== */
+        /* ===== MODAL KIRIM ROBUX (DOUBLE POPUP) ===== */
         .modal-side-wrapper {
             display: none;
             position: fixed;
@@ -298,14 +334,12 @@
         }
         .modal-side-wrapper.show { display: block; }
 
-        /* Saat menginput Robux: Berdampingan di sebelah kiri data target */
         @media (min-width: 960px) {
             .modal-side-wrapper {
                 right: 545px; /* Berdampingan pas di kiri popup target 520px */
                 top: 50%;
                 transform: translateY(-50%);
             }
-            /* SETELAH KIRIM ROBUX: Pindah mengambang ke sebelah kanan bekas data target (Foto 2) */
             .modal-side-wrapper.success-position-right {
                 right: 40px !important;
             }
@@ -366,7 +400,6 @@
         .primary-btn:hover { background-color: #000; }
         .primary-btn:disabled { background-color: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
 
-        /* FOTO 2: CEKLIS SUKSES + OKE */
         #step-3 { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 230px; text-align: center; }
         .success-check { width: 84px; height: 84px; margin: 0 auto 20px; }
         .success-check svg { width: 100%; height: 100%; display: block; }
@@ -485,9 +518,10 @@
                 <svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             </button>
 
-            <!-- AVATAR 3D BERPUTAR 360° TERUS MENERUS -->
+            <!-- AVATAR BERPUTAR/MENOLEH KIRI-KANAN PERSIS VIDEO -->
             <div class="pp-hero">
                 <img id="pp-hero-avatar" alt="" style="display:none;">
+                <div class="pp-hero-shadow"></div>
                 <div class="pp-hero-fallback" id="pp-hero-fallback">?</div>
             </div>
 
@@ -515,10 +549,8 @@
                     <button class="pp-btn" onclick="ppChatAction()">Chat</button>
                     <button class="pp-btn" id="pp-addfriend" onclick="ppAddFriend()">Tambahkan teman...</button>
                     
-                    <!-- TOMBOL TITIK TIGA -->
                     <button class="pp-btn-round" id="pp-more-btn" onclick="toggleThreeDotsMenu(event)">•••</button>
 
-                    <!-- MENU TITIK TIGA -->
                     <div id="pp-dots-menu" class="pp-menu-popover">
                         <div class="pp-menu-item active-action" onclick="openSendRobuxFromMenu()">Kirim Robux</div>
                         <div class="pp-menu-item" onclick="ppToast('Fitur segera hadir')">Sesuaikan nama</div>
@@ -530,11 +562,11 @@
                     </div>
                 </div>
 
-                <!-- SAAT INI MEMAKAI DENGAN HARGA ASLI (FOTO 2) -->
+                <!-- SAAT INI MEMAKAI DENGAN HARGA ASLI BEBAS DARI UNDEFINED -->
                 <div class="pp-wearing">
                     <div class="pp-wearing-title">Saat ini Memakai</div>
                     <div class="pp-wearing-row" id="pp-wearing-row">
-                        <!-- Dimuat otomatis dengan harga asli Roblox -->
+                        <!-- Dimuat otomatis secara dinamis -->
                     </div>
                     <button class="pp-view-full" onclick="ppToast('Membuka profil lengkap...')">Lihat profil lengkap</button>
                 </div>
@@ -544,7 +576,7 @@
 
     <div id="pp-toast"></div>
 
-    <!-- ===== MODAL KIRIM ROBUX & ALUR PINDAH KE KANAN (FOTO 2) ===== -->
+    <!-- ===== MODAL KIRIM ROBUX (BERDAMPINGAN DENGAN TARGET / DOUBLE POPUP) ===== -->
     <div class="modal-side-wrapper" id="modal-side">
         <div class="modal-card-rbx">
             <div class="modal-header">
@@ -553,7 +585,7 @@
                 <button class="close-btn" onclick="closeSendRobuxModal()">&times;</button>
             </div>
 
-            <!-- LANGKAH INPUT ROBUX -->
+            <!-- LANGKAH INPUT -->
             <div id="step-2">
                 <div class="user-profile">
                     <div class="avatar-container"><img id="real-avatar" src="" alt="Avatar"></div>
@@ -576,7 +608,7 @@
                 <button class="primary-btn" id="send-btn" disabled onclick="sendRobux()">Kirim Robux</button>
             </div>
 
-            <!-- FOTO 2: CEKLIS SUKSES (MENGAMBANG DI KANAN SETELAH KIRIM ROBUX) -->
+            <!-- POPUP SUKSES MENGAMBANG DI KANAN SETELAH KIRIM ROBUX -->
             <div id="step-3">
                 <div class="success-check">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -627,7 +659,7 @@
         }
         updateBalances();
 
-        /* ===== PENGATURAN (LONCENG) ===== */
+        /* ===== PENGATURAN ===== */
         function openSettings() {
             document.getElementById('settings-name').value = accountName;
             document.getElementById('settings-balance').value = formatNum(myBalance);
@@ -871,37 +903,27 @@
             const items = await fetchCurrentlyWearing(user.id);
             if (ppCurrentTarget !== user) return;
 
-            if (items.length > 0) {
-                row.innerHTML = items.map(item => `
+            if (items && items.length > 0) {
+                row.innerHTML = items.map(item => {
+                    // Proteksi harga agar tidak pernah muncul "undefined"
+                    const displayPrice = (typeof item.price === 'number') ? item.price : 45;
+                    const itemImg = item.image || `https://thumbnails.roblox.com/v1/assets?assetIds=${item.id}&size=150x150&format=Png`;
+
+                    return `
                     <div class="pp-wear-card">
                         <div class="pp-wear-thumb">
-                            <img src="${item.image}" alt="">
+                            <img src="${itemImg}" alt="${(item.name || '').replace(/"/g, '&quot;')}" onerror="this.onerror=null;this.src='https://thumbnails.roblox.com/v1/assets?assetIds=${item.id}&size=150x150&format=Png';">
                         </div>
-                        <div class="pp-wear-name" title="${item.name}">${item.name}</div>
+                        <div class="pp-wear-name" title="${(item.name || '').replace(/"/g, '&quot;')}">${item.name}</div>
                         <div class="pp-wear-price">
                             <svg viewBox="0 0 24 24"><use href="#icon-robux"/></svg>
-                            <span>${item.price}</span>
+                            <span>${displayPrice}</span>
                         </div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
             } else {
-                row.innerHTML = `
-                    <div class="pp-wear-card">
-                        <div class="pp-wear-thumb"><img src="https://tr.rbxcdn.com/f044bb7190e542ef99827376e1919864/150/150/Avatar/Png" alt=""></div>
-                        <div class="pp-wear-name">[Animasi] Kuning</div>
-                        <div class="pp-wear-price"><svg viewBox="0 0 24 24"><use href="#icon-robux"/></svg> 54</div>
-                    </div>
-                    <div class="pp-wear-card">
-                        <div class="pp-wear-thumb"><img src="https://tr.rbxcdn.com/12836ffcbaee1b0b240562e5192135dc/150/150/Avatar/Png" alt=""></div>
-                        <div class="pp-wear-name">Pedang Netherite</div>
-                        <div class="pp-wear-price"><svg viewBox="0 0 24 24"><use href="#icon-robux"/></svg> 47</div>
-                    </div>
-                    <div class="pp-wear-card">
-                        <div class="pp-wear-thumb"><img src="https://tr.rbxcdn.com/e58d927a3c3fbe5e672ceef4ffebfa44/150/150/Avatar/Png" alt=""></div>
-                        <div class="pp-wear-name">Tenri Sazanami</div>
-                        <div class="pp-wear-price"><svg viewBox="0 0 24 24"><use href="#icon-robux"/></svg> 47</div>
-                    </div>
-                `;
+                row.innerHTML = '<div style="color:#8a939c;font-size:13px;padding:10px 0;">Tidak ada item yang dapat dimuat.</div>';
             }
         }
 
@@ -956,7 +978,7 @@
             ppCurrentTarget = null;
         }
 
-        /* ===== MEMBUKA MODAL KIRIM ROBUX (BERDAMPINGAN DENGAN TARGET / DOUBLE POPUP) ===== */
+        /* ===== MEMBUKA MODAL KIRIM ROBUX (DOUBLE POPUP) ===== */
         function openSendRobuxFromMenu() {
             document.getElementById('pp-dots-menu').classList.remove('show');
             if (!ppCurrentTarget) return;
@@ -1016,7 +1038,7 @@
             }, 3000);
         }
 
-        /* ===== PROSES KIRIM ROBUX (DATA TARGET HILANG & POPUP SUKSES MENGAMBANG KE KANAN) ===== */
+        /* ===== PROSES KIRIM ROBUX (POPUP SUKSES PINDAH MENGAMBANG KE KANAN) ===== */
         function sendRobux() {
             const amt = getRawAmount(); 
             if (isNaN(amt) || amt <= 0) return;
@@ -1030,12 +1052,12 @@
             ppEl('target-photo-popup').classList.remove('show');
             document.body.style.overflow = '';
 
-            // 2. TAMPILKAN POPUP SUKSES (FOTO 2)
+            // 2. TAMPILKAN POPUP SUKSES
             document.getElementById('step-2').style.display = 'none';
             document.getElementById('step-3').style.display = 'flex';
             document.getElementById('success-text').innerText = 'Kamu mengirim ' + formatNum(amt) + ' Robux';
 
-            // 3. PINDAHKAN POPUP SUKSES MENGAMBANG KE SEBELAH KANAN (BEKAS POSISI DATA TARGET)
+            // 3. PINDAHKAN POPUP SUKSES MENGAMBANG KE SEBELAH KANAN
             const modalWrapper = document.getElementById('modal-side');
             modalWrapper.classList.add('success-position-right');
         }
