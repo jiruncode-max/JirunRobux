@@ -1,12 +1,105 @@
 /* =========================================================================
-   app.js — Core Engine & Dynamic UI Injection
-   Jika index.html dicuri tanpa file ini, pencuri hanya mendapat layar hijau.
+   app.js — Core Engine, Security Lock & Dynamic UI Injection
    ========================================================================= */
 
-// 1. INJEKSI OTOMATIS SELURUH ELEMEN UI KE DALAM DOKUMEN
-(function injectRobloxUI() {
+let currentMember = null;
+try {
+    const savedSession = sessionStorage.getItem('rbx_member_auth');
+    if (savedSession) currentMember = JSON.parse(savedSession);
+} catch(e) {}
+
+let myBalance = currentMember ? currentMember.balance : 0;
+let accountName = currentMember ? currentMember.name : "Member";
+let targetUser = "";
+let searchTimeout;
+let hsToken = 0;
+let ppCurrentTarget = null;
+
+// TAMPILKAN KOTAK LOGIN JIKA BELUM TERAUTENTIKASI
+if (!currentMember) {
+    showLoginLockScreen();
+} else {
+    initRobloxApp();
+}
+
+function showLoginLockScreen() {
+    const lockMarkup = `
+    <div id="auth-lock-overlay" class="auth-lock-overlay">
+        <div class="auth-card">
+            <div class="auth-badge-icon">🔒</div>
+            <h2 class="auth-title">Akses Khusus Member</h2>
+            <p class="auth-desc">Silakan masukkan username dan password member untuk membuka akses.</p>
+            <div id="auth-error-msg" class="auth-error-msg"></div>
+
+            <div class="auth-input-group">
+                <label>USERNAME</label>
+                <input type="text" id="login-user" class="input-box" placeholder="Contoh: asep" autocomplete="off">
+            </div>
+
+            <div class="auth-input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="login-pass" class="input-box" placeholder="••••••••">
+            </div>
+
+            <button class="primary-btn" id="login-submit-btn" onclick="submitMemberLogin()">Buka Akses</button>
+        </div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', lockMarkup);
+
+    document.getElementById('login-pass').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitMemberLogin();
+    });
+}
+
+async function submitMemberLogin() {
+    const uInput = document.getElementById('login-user').value.trim();
+    const pInput = document.getElementById('login-pass').value.trim();
+    const errEl = document.getElementById('auth-error-msg');
+    const btn = document.getElementById('login-submit-btn');
+
+    if (!uInput || !pInput) {
+        errEl.innerText = 'Username dan Password wajib diisi!';
+        errEl.style.display = 'block';
+        return;
+    }
+
+    errEl.style.display = 'none';
+    btn.innerText = 'Memeriksa...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: uInput, password: pInput })
+        });
+        const data = await res.json();
+
+        if (data && data.ok) {
+            sessionStorage.setItem('rbx_member_auth', JSON.stringify(data.user));
+            currentMember = data.user;
+            accountName = data.user.name;
+            myBalance = data.user.balance;
+
+            document.getElementById('auth-lock-overlay').remove();
+            initRobloxApp();
+        } else {
+            errEl.innerText = data.message || 'Username atau Password salah!';
+            errEl.style.display = 'block';
+            btn.innerText = 'Buka Akses';
+            btn.disabled = false;
+        }
+    } catch(e) {
+        errEl.innerText = 'Gagal menghubungi server verifikasi!';
+        errEl.style.display = 'block';
+        btn.innerText = 'Buka Akses';
+        btn.disabled = false;
+    }
+}
+
+function initRobloxApp() {
     const uiMarkup = `
-    <!-- SIMBOL ROBUX -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
         <symbol id="icon-robux" viewBox="0 0 24 24">
             <path fill-rule="evenodd" d="
@@ -17,7 +110,6 @@
         </symbol>
     </svg>
 
-    <!-- HEADER RESMI -->
     <header class="rbx-header">
         <div class="rbx-header-left">
             <div class="rbx-hamburger-btn" title="Menu">
@@ -46,9 +138,9 @@
         <div class="rbx-header-right">
             <div class="rbx-user-chip-disabled" title="Profil">
                 <div class="rbx-avatar-mini">
-                    <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="Avatar Jirun">
+                    <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="Avatar">
                 </div>
-                <span id="header-username">Jirun</span>
+                <span id="header-username">${accountName}</span>
             </div>
             <div class="rbx-robux-disabled" title="Robux">
                 <svg class="rbx-robux-svg"><use href="#icon-robux"/></svg>
@@ -62,7 +154,6 @@
         </div>
     </header>
 
-    <!-- POPUP PROFIL TARGET KANAN (520px) -->
     <div id="target-photo-popup">
         <div class="photo-popup-card">
             <button class="photo-popup-close" onclick="closePhotoPopup()" aria-label="Tutup">
@@ -113,7 +204,6 @@
         </div>
     </div>
 
-    <!-- MODAL KIRIM ROBUX (DOUBLE POPUP MENGAMBANG) -->
     <div class="modal-side-wrapper" id="modal-side">
         <div class="modal-card-rbx">
             <div class="modal-header">
@@ -152,7 +242,6 @@
         </div>
     </div>
 
-    <!-- MODAL PENGATURAN (LONCENG) -->
     <div class="settings-overlay" id="settings-modal">
         <div class="settings-modal-card">
             <div class="modal-header">
@@ -174,6 +263,7 @@
                 </div>
             </div>
             <button class="primary-btn" onclick="saveSettings()">Simpan Perubahan</button>
+            <button class="primary-btn" style="background:#d92d20;margin-top:8px;" onclick="logoutMember()">Keluar Akun</button>
         </div>
     </div>
 
@@ -181,28 +271,51 @@
     `;
 
     document.body.insertAdjacentHTML('afterbegin', uiMarkup);
-})();
+    bindAppEvents();
+    updateBalances();
+}
 
-// 2. STATE DATA AKUN & SALDO
-let myBalance = 46825;
-let accountName = "Jirun";
-let targetUser = "";
-let searchTimeout;
+function logoutMember() {
+    sessionStorage.removeItem('rbx_member_auth');
+    location.reload();
+}
 
-try {
-    const savedName = localStorage.getItem('rbx_name');
-    const savedBalance = localStorage.getItem('rbx_balance_v3');
-    if (savedName) accountName = savedName;
-    if (savedBalance && !isNaN(parseInt(savedBalance, 10))) myBalance = parseInt(savedBalance, 10);
-} catch(e) {}
+function bindAppEvents() {
+    const amountInput = document.getElementById('amount-input');
+    amountInput.addEventListener('input', function() {
+        const digits = this.value.replace(/[^0-9]/g, '');
+        this.value = digits === '' ? '' : parseInt(digits, 10).toLocaleString('en-US');
+        this.classList.toggle('filled', digits !== '');
+        validateAmount();
+    });
 
-document.getElementById('header-username').innerText = accountName;
+    const headerSearchInput = document.getElementById('header-search-input');
+    headerSearchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(executeHeaderSearch, 200);
+    });
+    headerSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            clearTimeout(searchTimeout);
+            executeHeaderSearch();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.rbx-header-center')) hsHide();
+        if (!e.target.closest('#pp-more-btn') && !e.target.closest('#pp-dots-menu')) {
+            const m = document.getElementById('pp-dots-menu');
+            if (m) m.classList.remove('show');
+        }
+    });
+}
 
 function formatNum(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-function updateBalances() { document.getElementById('modal-balance').innerText = formatNum(myBalance); }
-updateBalances();
+function updateBalances() { 
+    const el = document.getElementById('modal-balance');
+    if (el) el.innerText = formatNum(myBalance); 
+}
 
-// 3. PENGATURAN (LONCENG)
 function openSettings() {
     document.getElementById('settings-name').value = accountName;
     document.getElementById('settings-balance').value = formatNum(myBalance);
@@ -220,34 +333,23 @@ function saveSettings() {
         myBalance = newBalance;
         updateBalances();
     }
-    try {
-        localStorage.setItem('rbx_name', accountName);
-        localStorage.setItem('rbx_balance_v3', myBalance);
-    } catch(e) {}
     closeSettings();
     ppToast('Perubahan disimpan!');
 }
 
-// 4. INPUT ROBUX
-const amountInput = document.getElementById('amount-input');
-amountInput.addEventListener('input', function() {
-    const digits = this.value.replace(/[^0-9]/g, '');
-    this.value = digits === '' ? '' : parseInt(digits, 10).toLocaleString('en-US');
-    this.classList.toggle('filled', digits !== '');
-    validateAmount();
-});
 function validateAmount() {
-    const amt = parseInt(amountInput.value.replace(/[^0-9]/g, ''), 10);
+    const amt = parseInt(document.getElementById('amount-input').value.replace(/[^0-9]/g, ''), 10);
     document.getElementById('send-btn').disabled = !(amt > 0 && amt <= myBalance);
 }
 function setAmount(val) { 
+    const amountInput = document.getElementById('amount-input');
     amountInput.value = formatNum(val); 
     amountInput.classList.add('filled');
     validateAmount();
 }
 function getRawAmount() { return parseInt(document.getElementById('amount-input').value.replace(/[^0-9]/g, ''), 10); }
 
-// 5. KONEKSI KE API VERCEL
+// API KONEKSI ROBLOX
 const API = '/api/user';
 async function apiGet(params) {
     try {
@@ -306,19 +408,20 @@ function parsePastedInput(raw) {
     return { keyword: text.replace(/^@+/, '').trim() };
 }
 
-// 6. PENCARIAN HEADER
-const headerSearchInput = document.getElementById('header-search-input');
-const headerDropdown = document.getElementById('header-search-dropdown');
-const hsStatus = document.getElementById('hs-status');
-const hsItems = document.getElementById('hs-items');
-let hsToken = 0;
-
 function hsHide() {
-    headerDropdown.classList.remove('show');
-    hsItems.innerHTML = '';
+    const d = document.getElementById('header-search-dropdown');
+    if (d) {
+        d.classList.remove('show');
+        document.getElementById('hs-items').innerHTML = '';
+    }
 }
 
 async function executeHeaderSearch() {
+    const headerSearchInput = document.getElementById('header-search-input');
+    const headerDropdown = document.getElementById('header-search-dropdown');
+    const hsStatus = document.getElementById('hs-status');
+    const hsItems = document.getElementById('hs-items');
+
     const raw = headerSearchInput.value.trim().replace(/^@+/, '');
     if (!raw) { hsHide(); return; }
 
@@ -356,18 +459,9 @@ async function executeHeaderSearch() {
     }
 }
 
-headerSearchInput.addEventListener('input', () => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(executeHeaderSearch, 200);
-});
-headerSearchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        clearTimeout(searchTimeout);
-        executeHeaderSearch();
-    }
-});
-
 function renderHsResultsFast(users, isExact) {
+    const hsStatus = document.getElementById('hs-status');
+    const hsItems = document.getElementById('hs-items');
     hsStatus.innerText = isExact ? '' : users.length + ' hasil — klik untuk pilih';
     hsItems.innerHTML = users.map(u => {
         const nm = (u.name || '').replace(/'/g, "\\'");
@@ -396,19 +490,10 @@ function renderHsResultsFast(users, isExact) {
 
 function hsPick(id, name, displayName, ava) {
     hsHide();
-    headerSearchInput.value = '';
+    document.getElementById('header-search-input').value = '';
     openTargetProfile({ id: id, name: name, displayName: displayName || name }, ava || null);
 }
 
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.rbx-header-center')) hsHide();
-    if (!e.target.closest('#pp-more-btn') && !e.target.closest('#pp-dots-menu')) {
-        document.getElementById('pp-dots-menu').classList.remove('show');
-    }
-});
-
-// 7. POPUP TARGET
-let ppCurrentTarget = null;
 function ppEl(id){ return document.getElementById(id); }
 
 function toggleThreeDotsMenu(e) {
@@ -491,7 +576,6 @@ function closePhotoPopup(){
     ppCurrentTarget = null;
 }
 
-// 8. DOUBLE POPUP KIRIM ROBUX
 function openSendRobuxFromMenu() {
     document.getElementById('pp-dots-menu').classList.remove('show');
     if (!ppCurrentTarget) return;
@@ -509,6 +593,7 @@ function openSendRobuxFromMenu() {
         fetchAvatarUrl(t.id).then(url => { if (url) img.src = url; });
     }
 
+    const amountInput = document.getElementById('amount-input');
     amountInput.value = '';
     amountInput.classList.remove('filled');
     document.getElementById('send-btn').disabled = true;
@@ -544,7 +629,6 @@ function ppAddFriend(){
     setTimeout(() => { btn.innerText = 'Tambahkan teman...'; btn.disabled = false; }, 3000);
 }
 
-// 9. PROSES PENGIRIMAN & POPUP SUKSES BERPINDAH KE KANAN
 function sendRobux() {
     const amt = getRawAmount(); 
     if (isNaN(amt) || amt <= 0) return;
@@ -552,13 +636,10 @@ function sendRobux() {
 
     myBalance -= amt;
     updateBalances();
-    try { localStorage.setItem('rbx_balance_v3', myBalance); } catch(e) {}
     
-    // Sembunyikan drawer data target
     ppEl('target-photo-popup').classList.remove('show');
     document.body.style.overflow = '';
 
-    // Tampilkan popup sukses dan geser mengambang ke kanan
     document.getElementById('step-2').style.display = 'none';
     document.getElementById('step-3').style.display = 'flex';
     document.getElementById('success-text').innerText = 'Kamu mengirim ' + formatNum(amt) + ' Robux';
