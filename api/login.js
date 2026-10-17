@@ -1,7 +1,7 @@
 // api/login.js — Setting Akun Member Manual di GitHub
 const MEMBERS = [
-    { username: "Jirun", password: "JirunSmd27-", name: "ROBUX STORE", balance: 50000 },
-    { username: "member10", password: "pass123", name: "Member 10", balance: 40000 }
+    { username: "Jirun", password: "JirunSmd27-", name: "Jirun", balance: 0 },
+    { username: "jason88", password: "jason88", name: "Jirun", balance: 0 }
 ];
 
 module.exports = async (req, res) => {
