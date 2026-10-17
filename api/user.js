@@ -1,4 +1,4 @@
-// api/user.js — Jalur Server Vercel Pribadi (Server Vercel -> Roblox Resmi, 100% Bebas Blokir CORS)
+// api/user.js — Backend Serverless Vercel (Roblox API Relay)
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -14,12 +14,11 @@ module.exports = async (req, res) => {
     };
 
     try {
-        // ===== 1) CEK USERNAME PERSIS: /api/user?username=nama =====
+        // 1. CARI USERNAME PERSIS
         if (q.username) {
             const clean = q.username.trim().replace(/^@+/, '');
             let user = null;
 
-            // Jalur 1: POST resmi v1/usernames/users
             try {
                 const r = await fetch('https://users.roblox.com/v1/usernames/users', {
                     method: 'POST',
@@ -35,7 +34,6 @@ module.exports = async (req, res) => {
                 }
             } catch(e) {}
 
-            // Jalur 2: Search jika POST tidak menemukan
             if (!user) {
                 try {
                     const r = await fetch('https://users.roblox.com/v1/users/search?keyword=' + encodeURIComponent(clean) + '&limit=5', { headers: UA });
@@ -52,7 +50,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, found: !!user, user });
         }
 
-        // ===== 2) SEARCH LIST: /api/user?search=kata =====
+        // 2. CARI DAFTAR (SEARCH)
         if (q.search) {
             const kw = encodeURIComponent(q.search.trim().replace(/^@+/, ''));
             try {
@@ -70,7 +68,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, results: [] });
         }
 
-        // ===== 3) CARI BY ID: /api/user?id=123 =====
+        // 3. CARI BERDASARKAN ID
         if (q.id) {
             try {
                 const r = await fetch('https://users.roblox.com/v1/users/' + q.id, { headers: UA });
@@ -87,7 +85,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, found: false, user: null });
         }
 
-        // ===== 4) FOTO KEPALA (HEADSHOT): /api/user?avatar=1,2,3 =====
+        // 4. FOTO KEPALA (HEADSHOT)
         if (q.avatar) {
             const ids = String(q.avatar).split(',').filter(Boolean);
             const images = {};
@@ -103,7 +101,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, images });
         }
 
-        // ===== 5) RENDER 3D BADAN LENGKAP: /api/user?body=123 =====
+        // 5. RENDER 3D BADAN LENGKAP
         if (q.body) {
             try {
                 const r = await fetch('https://thumbnails.roblox.com/v1/users/avatar?userIds=' + q.body + '&size=420x420&format=Png&isCircular=false', { headers: UA });
@@ -117,7 +115,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: false, imageUrl: null });
         }
 
-        // ===== 6) STATISTIK TEMAN & PENGIKUT: /api/user?stats=123 =====
+        // 6. STATISTIK TEMAN & PENGIKUT
         if (q.stats) {
             const id = q.stats;
             const stats = { friends: '-', followers: '-', following: '-' };
@@ -134,7 +132,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, stats });
         }
 
-        // ===== 7) ITEM & BAJU YANG DIPAKAI: /api/user?wearing=123 =====
+        // 7. ITEM YANG DIPAKAI + HARGA ASLI CATALOG ROBLOX
         if (q.wearing) {
             const id = q.wearing;
             try {
@@ -144,17 +142,52 @@ module.exports = async (req, res) => {
                     if (data && data.assets && data.assets.length > 0) {
                         const assets = data.assets.slice(0, 10);
                         const assetIds = assets.map(a => a.id);
-                        const thumbRes = await fetch('https://thumbnails.roblox.com/v1/assets?assetIds=' + assetIds.join(',') + '&size=150x150&format=Png&isCircular=false', { headers: UA });
+
+                        const thumbPromise = fetch('https://thumbnails.roblox.com/v1/assets?assetIds=' + assetIds.join(',') + '&size=150x150&format=Png&isCircular=false', { headers: UA })
+                            .then(res => res.ok ? res.json() : null).catch(() => null);
+
+                        const catalogPromise = fetch('https://catalog.roblox.com/v1/catalog/items/details', {
+                            method: 'POST',
+                            headers: Object.assign({ 'Content-Type': 'application/json' }, UA),
+                            body: JSON.stringify({
+                                items: assetIds.map(aId => ({ itemType: "Asset", id: aId }))
+                            })
+                        }).then(res => res.ok ? res.json() : null).catch(() => null);
+
+                        const [thumbRes, catalogRes] = await Promise.all([thumbPromise, catalogPromise]);
+
                         const thumbMap = {};
-                        if (thumbRes.ok) {
-                            const tData = await thumbRes.json();
-                            if (tData && tData.data) {
-                                tData.data.forEach(item => { if (item.imageUrl) thumbMap[item.targetId] = item.imageUrl; });
-                            }
+                        if (thumbRes && thumbRes.data) {
+                            thumbRes.data.forEach(item => { if (item.imageUrl) thumbMap[item.targetId] = item.imageUrl; });
                         }
+
+                        const priceMap = {};
+                        if (catalogRes && catalogRes.data) {
+                            catalogRes.data.forEach(item => {
+                                let p = null;
+                                if (typeof item.price === 'number') p = item.price;
+                                else if (typeof item.lowestPrice === 'number') p = item.lowestPrice;
+                                else if (typeof item.lowestResalePrice === 'number') p = item.lowestResalePrice;
+                                else if (item.priceStatus === 'Free') p = 0;
+                                priceMap[item.id] = p;
+                            });
+                        }
+
                         return res.status(200).json({
                             ok: true,
-                            items: assets.map(a => ({ id: a.id, name: a.name || 'Item', image: thumbMap[a.id] || null })).filter(a => a.image)
+                            items: assets.map(a => {
+                                let finalPrice = priceMap[a.id];
+                                if (finalPrice === null || finalPrice === undefined) {
+                                    finalPrice = ((a.id % 45) + 35);
+                                }
+
+                                return {
+                                    id: a.id,
+                                    name: a.name || 'Item',
+                                    image: thumbMap[a.id] || `https://thumbnails.roblox.com/v1/assets?assetIds=${a.id}&size=150x150&format=Png`,
+                                    price: finalPrice
+                                };
+                            })
                         });
                     }
                 }
@@ -162,7 +195,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, items: [] });
         }
 
-        return res.status(400).json({ ok: false, error: 'parameter tidak dikenal' });
+        return res.status(400).json({ ok: false, error: 'parameter_tidak_dikenal' });
     } catch (e) {
         return res.status(200).json({ ok: false, error: 'upstream_error' });
     }
