@@ -9,25 +9,27 @@
 
     <style>
         :root {
-            --bg-body: #F2F4F5;
+            --bg-body: #00FF00;
             --bg-surface: #FFFFFF;
             --text-primary: #191B1D;
             --text-secondary: #393B3D;
             --text-muted: #B8B8B8;
             --border-color: #E3E3E3;
-            --search-bg: #E8EAED;
             --btn-hover: #ECEFF1;
             --blue: #335fff;
         }
 
-        body {
-            margin: 0; padding: 0; background-color: var(--bg-body);
-            color: var(--text-primary); font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
+        html, body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
             overflow-x: hidden;
+            overflow-y: auto;
         }
         * { box-sizing: border-box; }
 
-        /* ===== HEADER IDENTIK SCREENSHOT ===== */
+        /* ===== HEADER RESMI ROBLOX ===== */
         .rbx-header {
             background-color: var(--bg-surface);
             height: 54px;
@@ -41,244 +43,130 @@
             z-index: 100;
         }
 
-        /* Kiri: Hamburger + Logo Roblox */
-        .rbx-header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* Menu Garis 3 + Titik Biru */
+        .rbx-header-left { display: flex; align-items: center; gap: 20px; }
         .rbx-hamburger-btn {
-            position: relative;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: .15s;
+            position: relative; width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border-radius: 8px; transition: .15s;
         }
-        .rbx-hamburger-btn:hover {
-            background-color: var(--btn-hover);
-        }
+        .rbx-hamburger-btn:hover { background-color: var(--btn-hover); }
         .rbx-hamburger-lines {
-            width: 19px;
-            height: 13px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            width: 19px; height: 13px;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
         .rbx-hamburger-lines span {
-            display: block;
-            height: 2px;
-            width: 100%;
-            background-color: #191B1D;
-            border-radius: 2px;
+            display: block; height: 2px; width: 100%;
+            background-color: #191B1D; border-radius: 2px;
         }
         .rbx-hamburger-dot {
-            position: absolute;
-            top: 8px;
-            right: 6px;
-            width: 7.5px;
-            height: 7.5px;
-            background-color: #2F64F6;
-            border-radius: 50%;
+            position: absolute; top: 8px; right: 6px;
+            width: 7.5px; height: 7.5px;
+            background-color: #2F64F6; border-radius: 50%;
             box-shadow: 0 0 0 2px #fff;
         }
 
-        /* Logo Roblox */
-        .rbx-logo-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            user-select: none;
-        }
-        .rbx-logo-text {
-            font-weight: 900;
-            font-size: 24px;
-            color: #191B1D;
-            letter-spacing: 0.5px;
-            line-height: 1;
-        }
+        .rbx-logo-link { display: flex; align-items: center; text-decoration: none; user-select: none; }
+        .rbx-logo-text { font-weight: 900; font-size: 24px; color: #191B1D; letter-spacing: 0.5px; line-height: 1; }
         .rbx-logo-o {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 5.5px solid #191B1D;
-            border-radius: 3px;
-            transform: rotate(15deg);
-            margin: 0 4.5px;
+            display: inline-block; width: 16px; height: 16px;
+            border: 5.5px solid #191B1D; border-radius: 3px;
+            transform: rotate(15deg); margin: 0 4.5px;
         }
 
-        /* Tengah: Bilah Pencarian "Cari" */
-        .rbx-header-center {
-            flex-grow: 1;
-            max-width: 580px;
-            margin: 0 20px;
-            position: relative;
-        }
-        .rbx-search-box {
-            position: relative;
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
+        /* Bilah Pencarian "Cari" */
+        .rbx-header-center { flex-grow: 1; max-width: 580px; margin: 0 20px; position: relative; }
+        .rbx-search-box { position: relative; width: 100%; display: flex; align-items: center; }
         .rbx-search-input {
-            width: 100%;
-            height: 38px;
-            padding: 0 16px 0 42px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            background-color: #ECEFF1;
-            font-family: inherit;
-            font-size: 15px;
-            color: var(--text-primary);
-            outline: none;
-            transition: .2s;
+            width: 100%; height: 38px; padding: 0 16px 0 42px;
+            border-radius: 8px; border: 1px solid transparent;
+            background-color: #ECEFF1; font-family: inherit;
+            font-size: 15px; color: var(--text-primary); outline: none; transition: .2s;
         }
-        .rbx-search-input::placeholder {
-            color: #494c50;
-            font-weight: 500;
-        }
+        .rbx-search-input::placeholder { color: #494c50; font-weight: 500; }
         .rbx-search-input:focus {
-            background-color: #FFFFFF;
-            border-color: #C0C4C8;
+            background-color: #FFFFFF; border-color: #C0C4C8;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .rbx-icon-search {
-            position: absolute;
-            left: 13px;
-            width: 19px;
-            height: 19px;
-            stroke: #191B1D;
-            stroke-width: 2.2;
-            fill: none;
-            pointer-events: none;
+            position: absolute; left: 13px; width: 19px; height: 19px;
+            stroke: #191B1D; stroke-width: 2.2; fill: none; pointer-events: none;
         }
 
-        /* Kanan: Profil Jirun + Robux + Lonceng */
-        .rbx-header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .rbx-user-chip {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            cursor: pointer;
-            padding: 4px 10px 4px 4px;
-            border-radius: 20px;
-            transition: .15s;
-        }
-        .rbx-user-chip:hover {
-            background-color: var(--btn-hover);
+        /* Bagian Kanan */
+        .rbx-header-right { display: flex; align-items: center; gap: 12px; }
+
+        /* Profil Jirun: TIDAK BISA DIKLIK */
+        .rbx-user-chip-disabled {
+            display: flex; align-items: center; gap: 9px;
+            padding: 4px 6px; cursor: default; user-select: none; pointer-events: none;
         }
         .rbx-avatar-mini {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: #fff;
-            flex-shrink: 0;
+            width: 32px; height: 32px; border-radius: 50%;
+            overflow: hidden; background: #fff; flex-shrink: 0;
             box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
         }
-        .rbx-avatar-mini img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .rbx-user-chip span {
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text-primary);
-        }
+        .rbx-avatar-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .rbx-user-chip-disabled span { font-weight: 700; font-size: 15px; color: var(--text-primary); }
 
-        /* Ikon Tombol (Robux & Lonceng) */
-        .rbx-action-btn {
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: .15s;
+        /* Ikon Robux: TIDAK BISA DIKLIK */
+        .rbx-robux-disabled {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: default; user-select: none; pointer-events: none;
         }
-        .rbx-action-btn:hover {
-            background-color: var(--btn-hover);
+        .rbx-robux-svg { width: 22px; height: 22px; fill: #191B1D; }
+
+        /* Ikon Lonceng: SATU-SATUNYA YANG BISA DIKLIK */
+        .rbx-bell-clickable {
+            width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; cursor: pointer; transition: .15s;
         }
-        .rbx-robux-svg {
-            width: 22px;
-            height: 22px;
-            fill: #191B1D;
-        }
+        .rbx-bell-clickable:hover { background-color: var(--btn-hover); }
         .rbx-bell-svg {
-            width: 21px;
-            height: 21px;
-            stroke: #191B1D;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            width: 21px; height: 21px; stroke: #191B1D;
+            stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;
         }
 
-        /* ===== DROPDOWN PENCARIAN ===== */
+        /* Bagian Hijau Memanjang ke Bawah */
+        .rbx-greenscreen-content {
+            width: 100%; min-height: 2200px;
+            background-color: #00FF00; display: block;
+        }
+
+        /* Dropdown Hasil Pencarian */
         #header-search-dropdown {
             display: none; position: absolute;
             top: calc(100% + 6px); left: 0; right: 0;
-            background: #fff; border-radius: 10px;
-            box-shadow: 0 12px 36px rgba(0,0,0,.22);
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.25);
             padding: 8px; max-height: 340px; overflow-y: auto;
-            text-align: left; z-index: 300;
-            border: 1px solid #E3E3E3;
+            text-align: left; z-index: 2000; border: 1px solid #E3E3E3;
         }
         #header-search-dropdown.show { display: block; }
         #hs-status { padding: 4px 10px 6px; color: #666; font-size: 12px; font-weight: 600; }
         .hs-item {
             display: flex; align-items: center; gap: 10px;
-            padding: 8px 10px; border-radius: 8px;
+            padding: 8px 10px; border-radius: 10px;
             cursor: pointer; transition: .15s;
         }
         .hs-item:hover { background: #f4f4f4; }
         .hs-item img {
-            width: 38px; height: 38px; border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             object-fit: cover; background: #fff; flex-shrink: 0;
             border: 1px solid #eee;
         }
         .hs-name { font-weight: 700; font-size: 14px; color: #000; }
         .hs-user { font-size: 12px; color: #666; font-weight: 600; }
-        #hs-skip-btn {
-            margin: 6px 4px 2px; width: calc(100% - 8px);
-            background: #e6a817; color: #fff; border: none;
-            padding: 10px; border-radius: 8px; font-weight: 700;
-            font-size: 14px; cursor: pointer; font-family: inherit;
-            display: none;
-        }
-        #hs-skip-btn.show { display: block; }
 
-        /* ===== KONTEN: GAMBAR LATAR FULL ===== */
-        .rbx-container { width: 100%; margin: 0; padding: 0; }
-        .rbx-content { width: 100%; min-width: 0; position: relative; z-index: 1; }
-        .page-img {
-            width: 100%;
-            height: calc(100vh - 54px);
-            object-fit: cover;
-            object-position: top center;
-            display: block;
-        }
-
-        /* ===== POPUP PROFIL TARGET ===== */
+        /* Popup Profil Target Akurat */
         #target-photo-popup {
             position: fixed; inset: 0; z-index: 99999;
             display: none; justify-content: flex-end;
-            background: rgba(0,0,0,.45);
-            backdrop-filter: blur(3px);
+            background: rgba(0,0,0,.45); backdrop-filter: blur(3px);
         }
         #target-photo-popup.show { display: flex; }
+
         .photo-popup-card {
             width: 50vw; min-width: 340px; max-width: 600px;
             height: 100%; background: #f2f4f6;
@@ -292,12 +180,13 @@
 
         .photo-popup-close {
             position: absolute; top: 20px; left: 20px; z-index: 10;
-            width: 48px; height: 48px; border: 0; border-radius: 50%;
+            width: 52px; height: 52px; border: 0; border-radius: 50%;
             background: #fff; cursor: pointer;
             box-shadow: 0 4px 16px rgba(0,0,0,.18);
             display: flex; align-items: center; justify-content: center;
         }
-        .photo-popup-close svg { width: 24px; height: 24px; fill: #1b2a4a; }
+        .photo-popup-close:hover { transform: scale(1.07); }
+        .photo-popup-close svg { width: 26px; height: 26px; fill: #1b2a4a; }
 
         .pp-hero {
             flex: 0 0 auto; height: 44vh; min-height: 250px;
@@ -341,26 +230,31 @@
             cursor: pointer; transition: .15s;
         }
         .pp-btn:hover { background: #e2e5e9; }
-        .pp-btn-round {
-            flex: 0 0 auto; width: 56px; height: 56px; border: 0; border-radius: 50%;
-            background: #eef0f3; color: #1b2a4a; font-size: 18px; font-weight: 800;
-            cursor: pointer;
-        }
 
         .pp-wearing { margin-top: 28px; }
         .pp-wearing-title { font-size: 22px; font-weight: 800; color: #1b2a4a; margin-bottom: 14px; }
         .pp-wearing-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; }
         .pp-wear-item {
-            flex: 0 0 auto; width: 110px; height: 110px; border-radius: 16px;
+            flex: 0 0 auto; width: 116px; height: 116px; border-radius: 16px;
             background: #eef0f3; overflow: hidden; display: flex; align-items: center; justify-content: center;
         }
         .pp-wear-item img { width: 100%; height: 100%; object-fit: cover; }
         .pp-wearing-empty { color: #8a939c; font-size: 13px; font-weight: 600; padding: 8px 2px; }
 
-        /* ===== MODAL KIRIM ROBUX ===== */
+        #pp-toast {
+            position: fixed; bottom: 26px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1b2a4a; color: #fff;
+            padding: 12px 22px; border-radius: 999px;
+            font-size: 14px; font-weight: 700; opacity: 0; pointer-events: none; transition: .3s;
+            z-index: 100001; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+        #pp-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Modal Kirim Robux */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 1000; 
+            background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 10000; 
             backdrop-filter: blur(1px);
         }
         .modal { 
@@ -374,17 +268,6 @@
         .modal-balance { font-weight: 700; display: flex; align-items: center; gap: 5px; font-size: 16px; }
         .modal-balance .hex-xs { width: 18px; height: 18px; fill: #36393C; }
         .close-btn { border: none; background: none; font-size: 26px; color: #9aa0a6; cursor: pointer; }
-
-        .input-box { width: 100%; padding: 12px; border: 1px solid var(--text-muted); border-radius: 8px; font-size: 16px; outline: none; font-weight: 600; font-family: inherit; background-color: var(--bg-body); }
-        .input-box:focus { border-color: var(--text-primary); background-color: var(--bg-surface); }
-        .search-status { font-size: 12px; font-weight: 600; margin-top: 8px; min-height: 15px; text-align: left; }
-
-        .primary-btn { 
-            background-color: var(--text-primary); color: white; border: none; width: 100%; padding: 12px; 
-            border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 15px; font-family: inherit;
-        }
-        .primary-btn:hover { background-color: #000000; }
-        .primary-btn:disabled { background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
         .user-profile { margin-bottom: 10px; }
         .avatar-container { 
@@ -402,9 +285,15 @@
             background: transparent; font-family: inherit; text-align: center; color: var(--text-muted);
         }
         .amount-input.filled { color: var(--text-primary); }
-       
         .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .preset-btn { background-color: #f2f3f5; border: 1px solid transparent; padding: 12px 0; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; color: var(--text-primary); }
+
+        .primary-btn { 
+            background-color: var(--text-primary); color: white; border: none; width: 100%; padding: 12px; 
+            border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 15px; font-family: inherit;
+        }
+        .primary-btn:hover { background-color: #000000; }
+        .primary-btn:disabled { background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
         #step-3 { flex-direction: column; align-items: center; justify-content: center; min-height: 230px; text-align: center; }
         .success-check { width: 84px; height: 84px; margin: 0 auto 24px; }
@@ -412,7 +301,7 @@
         .success-text { margin: 0 0 24px; color: #111; font-size: 18px; font-weight: 500; }
         .oke-btn { background: var(--blue); color: #fff; border: none; width: 100%; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; }
 
-        /* ===== MODAL PENGATURAN (LONCENG) ===== */
+        /* Modal Pengaturan (Lonceng) */
         .settings-row {
             display: flex; align-items: center; gap: 12px;
             background: #f7f8f9; border: 1px solid var(--border-color);
@@ -421,22 +310,11 @@
         .settings-row-icon { font-size: 20px; flex-shrink: 0; }
         .settings-row-body { flex: 1; min-width: 0; }
         .settings-label { display: block; font-size: 11px; font-weight: 700; color: #8a8f96; margin-bottom: 5px; letter-spacing: .5px; }
-        .settings-hint { font-size: 11px; color: #9aa0a6; margin-top: 6px; font-weight: 500; }
-
-        #pp-toast {
-            position: fixed; bottom: 26px; left: 50%;
-            transform: translateX(-50%) translateY(80px);
-            background: #1b2a4a; color: #fff;
-            padding: 12px 22px; border-radius: 999px;
-            font-size: 14px; font-weight: 700; opacity: 0; pointer-events: none; transition: .3s;
-            z-index: 100001; box-shadow: 0 10px 30px rgba(0,0,0,.35);
-        }
-        #pp-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .input-box { width: 100%; padding: 10px 12px; border: 1px solid var(--text-muted); border-radius: 8px; font-size: 15px; outline: none; font-weight: 600; font-family: inherit; background-color: #ffffff; }
     </style>
 </head>
 <body>
 
-    <!-- SIMBOL HEXAGON ROBUX -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
         <symbol id="icon-robux" viewBox="0 0 24 24">
             <path fill-rule="evenodd" d="
@@ -448,7 +326,6 @@
     </svg>
 
     <script>
-        // Data akun & saldo yang tersimpan
         let myBalance = 1000;
         let accountName = "Jirun";
         let targetUser = ""; 
@@ -465,7 +342,6 @@
     <!-- ===== HEADER SESUAI SCREENSHOT ===== -->
     <header class="rbx-header">
         <div class="rbx-header-left">
-            <!-- Menu Garis 3 dengan Titik Biru -->
             <div class="rbx-hamburger-btn" title="Menu">
                 <div class="rbx-hamburger-lines">
                     <span></span>
@@ -475,13 +351,11 @@
                 <div class="rbx-hamburger-dot"></div>
             </div>
 
-            <!-- Logo ROBLOX -->
             <a href="#" class="rbx-logo-link" aria-label="Roblox">
                 <span class="rbx-logo-text">R</span><span class="rbx-logo-o"></span><span class="rbx-logo-text">BLOX</span>
             </a>
         </div>
 
-        <!-- Bilah Pencarian "Cari" -->
         <div class="rbx-header-center">
             <div class="rbx-search-box">
                 <svg class="rbx-icon-search" viewBox="0 0 24 24">
@@ -494,26 +368,25 @@
             <div id="header-search-dropdown">
                 <div id="hs-status"></div>
                 <div id="hs-items"></div>
-                <button id="hs-skip-btn" onclick="hsSkip()">Lanjut pakai nama ini</button>
             </div>
         </div>
 
-        <!-- Bagian Kanan: Avatar + Jirun + Robux + Lonceng -->
         <div class="rbx-header-right">
-            <div class="rbx-user-chip" onclick="openSettings()" title="Profil & Pengaturan">
+            <!-- Profil Jirun (Tidak bisa diklik) -->
+            <div class="rbx-user-chip-disabled" title="Profil">
                 <div class="rbx-avatar-mini">
                     <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="Avatar Jirun">
                 </div>
                 <span id="header-username">Jirun</span>
             </div>
 
-            <!-- Ikon Robux Hexagon (Bisa diklik untuk buka modal kirim Robux) -->
-            <div class="rbx-action-btn" onclick="openModal()" title="Kirim Robux">
+            <!-- Ikon Robux (Tidak bisa diklik) -->
+            <div class="rbx-robux-disabled" title="Robux">
                 <svg class="rbx-robux-svg"><use href="#icon-robux"/></svg>
             </div>
 
-            <!-- Ikon Lonceng = Pengaturan Nama & Poin Robux -->
-            <div class="rbx-action-btn" onclick="openSettings()" title="Pengaturan Nama & Poin Robux">
+            <!-- IKON LONCENG: SATU-SATUNYA YANG BISA DIKLIK -->
+            <div class="rbx-bell-clickable" onclick="openSettings()" title="Pengaturan Nama & Poin Robux">
                 <svg class="rbx-bell-svg" viewBox="0 0 24 24">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                     <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -522,22 +395,17 @@
         </div>
     </header>
 
-    <!-- ===== KONTEN TAMPILAN UTAMA ===== -->
-    <div class="rbx-container">
-        <main class="rbx-content">
-            <div id="page-beranda">
-                <img class="page-img" src="https://i.top4top.io/p_3941176u61.jpeg" alt="Roblox">
-            </div>
-        </main>
-    </div>
+    <!-- ===== BAGIAN HIJAU MEMANJANG KE BAWAH ===== -->
+    <main class="rbx-greenscreen-content" id="green-canvas"></main>
 
-    <!-- ===== POPUP PROFIL TARGET ===== -->
+    <!-- ===== POPUP PROFIL TARGET AKURAT ===== -->
     <div id="target-photo-popup">
         <div class="photo-popup-card">
             <button class="photo-popup-close" onclick="closePhotoPopup()" aria-label="Tutup">
                 <svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             </button>
 
+            <!-- Render 3D Badan Penuh Asli Roblox -->
             <div class="pp-hero">
                 <img id="pp-hero-avatar" alt="" style="display:none;">
                 <div class="pp-hero-fallback" id="pp-hero-fallback">?</div>
@@ -556,6 +424,7 @@
                     </div>
                 </div>
 
+                <!-- Statistik Asli Akun Roblox -->
                 <div class="pp-stats">
                     <div class="pp-stat-chip"><b id="pp-friends">-</b> Teman</div>
                     <div class="pp-stat-chip"><b id="pp-followers">-</b> Pengikut</div>
@@ -567,6 +436,7 @@
                     <button class="pp-btn" id="pp-addfriend" onclick="ppAddFriend()">Tambahkan teman...</button>
                 </div>
 
+                <!-- Baju & Aksesoris Asli Pemain -->
                 <div class="pp-wearing">
                     <div class="pp-wearing-title">Saat ini Memakai</div>
                     <div class="pp-wearing-row" id="pp-wearing-row">
@@ -588,13 +458,7 @@
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
 
-            <div id="step-1">
-                <input type="text" id="username-input" class="input-box" placeholder="Cari username..." oninput="handleInputSearch()">
-                <div id="search-status" class="search-status"></div>
-                <button class="primary-btn" id="search-btn" disabled onclick="goToStep2()">Next</button>
-            </div>
-
-            <div id="step-2" style="display: none;">
+            <div id="step-2">
                 <div class="user-profile">
                     <div class="avatar-container"><img id="real-avatar" src="" alt="Avatar"></div>
                     <div class="display-name" id="display-name-text">Name</div>
@@ -629,13 +493,11 @@
         </div>
     </div>
 
-    <!-- ===== MODAL PENGATURAN (KLIK LONCENG) ===== -->
+    <!-- ===== MODAL PENGATURAN (LONCENG) ===== -->
     <div class="modal-overlay" id="settings-modal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title">
-                    <svg class="hex-sm"><use href="#icon-robux"/></svg> Pengaturan Profil
-                </div>
+                <div class="modal-title"><svg class="hex-sm"><use href="#icon-robux"/></svg> Pengaturan</div>
                 <button class="close-btn" onclick="closeSettings()">&times;</button>
             </div>
 
@@ -650,9 +512,8 @@
             <div class="settings-row">
                 <div class="settings-row-icon">💎</div>
                 <div class="settings-row-body">
-                    <label class="settings-label">SALDO / POIN ROBUX</label>
+                    <label class="settings-label">SALDO ROBUX</label>
                     <input type="text" id="settings-balance" class="input-box" placeholder="0">
-                    <div class="settings-hint">Jumlah Robux yang tersedia untuk dikirimkan.</div>
                 </div>
             </div>
 
@@ -661,7 +522,6 @@
     </div>
 
     <script>
-        /* Terapkan nama & saldo */
         document.getElementById('header-username').innerText = accountName;
 
         function formatNum(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -670,19 +530,6 @@
         }
         updateBalances();
 
-        function showStep(stepId) {
-            ['step-1', 'step-2', 'step-3'].forEach(id => {
-                document.getElementById(id).style.display = (id === stepId) ? 'block' : 'none';
-            });
-        }
-
-        function openModal() {
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('username-input').value = '';
-            document.getElementById('search-status').innerText = '';
-            document.getElementById('search-btn').disabled = true;
-            showStep('step-1');
-        }
         function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
         /* Pengaturan (Lonceng) */
@@ -691,9 +538,8 @@
             document.getElementById('settings-balance').value = formatNum(myBalance);
             document.getElementById('settings-modal').style.display = 'flex';
         }
-        function closeSettings() {
-            document.getElementById('settings-modal').style.display = 'none';
-        }
+        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+
         function saveSettings() {
             const newName = document.getElementById('settings-name').value.trim();
             if (newName) {
@@ -736,64 +582,44 @@
         }
         function getRawAmount() { return parseInt(document.getElementById('amount-input').value.replace(/[^0-9]/g, ''), 10); }
 
-        /* API Helper */
-        async function tryJSON(url, options = {}) {
+        /* =========================================================================
+           KONEKSI KE SERVER VERCEL PRIBADI (/api/user)
+           ========================================================================= */
+        const API = '/api/user';
+
+        async function apiGet(params) {
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
-                const res = await fetch(url, { ...options, signal: controller.signal });
-                clearTimeout(timeoutId);
+                const res = await fetch(API + '?' + params);
                 if (!res.ok) return null;
-                return await res.json();
+                const d = await res.json();
+                if (!d || d.ok === false) return null;
+                return d;
             } catch (e) { return null; }
         }
 
-        async function fetchRobloxApi(path, options = {}) {
-            let data = await tryJSON('https://users.roproxy.com' + path, options);
-            if (data) return data;
-            try {
-                const corsUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://users.roblox.com' + path);
-                data = await tryJSON(corsUrl, options);
-                if (data) return data;
-            } catch (e) {}
+        async function exactMatchUser(cleanKw) {
+            const d = await apiGet('username=' + encodeURIComponent(cleanKw));
+            if (d && d.found && d.user) return d.user;
             return null;
         }
 
-        async function exactMatchUser(keyword) {
-            const cleanKw = keyword.trim().replace(/^@+/, '');
-            const body = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usernames: [cleanKw], excludeBannedUsers: false })
-            };
-            const data = await fetchRobloxApi('/v1/usernames/users', body);
-            if (data && data.data && data.data.length > 0) return data.data[0];
-            return null;
-        }
-
-        async function searchUsers(keyword) {
-            const cleanKw = keyword.trim().replace(/^@+/, '');
-            const data = await fetchRobloxApi('/v1/users/search?keyword=' + encodeURIComponent(cleanKw) + '&limit=12');
-            if (data && data.data && data.data.length > 0) {
-                return data.data.map(u => ({ id: u.id, name: u.name, displayName: u.displayName || u.name }));
-            }
+        async function searchUsers(cleanKw) {
+            const d = await apiGet('search=' + encodeURIComponent(cleanKw));
+            if (d && d.results && d.results.length > 0) return d.results;
             return [];
         }
 
         async function getUserById(id) {
-            const data = await fetchRobloxApi('/v1/users/' + id);
-            if (data && data.id && data.name) return { id: data.id, name: data.name, displayName: data.displayName || data.name };
+            const d = await apiGet('id=' + id);
+            if (d && d.found && d.user) return d.user;
             return null;
         }
 
         async function fetchAvatarMap(userIds) {
             const map = {};
             if (!userIds || !userIds.length) return map;
-            const q = 'userIds=' + userIds.join(',') + '&size=150x150&format=Png&isCircular=true';
-            let data = await tryJSON('https://thumbnails.roproxy.com/v1/users/avatar-headshot?' + q);
-            if (data && data.data) {
-                data.data.forEach(x => { if (x.state === 'Completed' && x.imageUrl) map[x.targetId] = x.imageUrl; });
-            }
+            const d = await apiGet('avatar=' + userIds.join(','));
+            if (d && d.images) Object.assign(map, d.images);
             return map;
         }
 
@@ -804,29 +630,23 @@
 
         async function fetchFullBodyAvatar(id){
             if(!id) return null;
-            const q = 'userIds=' + id + '&size=420x420&format=Png&isCircular=false';
-            let data = await tryJSON('https://thumbnails.roproxy.com/v1/users/avatar?' + q);
-            if (data && data.data && data.data[0] && data.data[0].imageUrl) return data.data[0].imageUrl;
+            const d = await apiGet('body=' + id);
+            if (d && d.imageUrl) return d.imageUrl;
             return await fetchAvatarUrl(id);
         }
 
         async function fetchSocialCounts(id){
             const out = { friends:'-', followers:'-', following:'-' };
-            const [f, fol, fing] = await Promise.all([
-                tryJSON('https://friends.roproxy.com/v1/users/' + id + '/friends/count'),
-                tryJSON('https://friends.roproxy.com/v1/users/' + id + '/followers/count'),
-                tryJSON('https://friends.roproxy.com/v1/users/' + id + '/followings/count')
-            ]);
-            if (f && typeof f.count === 'number') out.friends = f.count.toLocaleString('en-US');
-            if (fol && typeof fol.count === 'number') out.followers = fol.count.toLocaleString('en-US');
-            if (fing && typeof fing.count === 'number') out.following = fing.count.toLocaleString('en-US');
+            if(!id) return out;
+            const d = await apiGet('stats=' + id);
+            if (d && d.stats) return d.stats;
             return out;
         }
 
         async function fetchCurrentlyWearing(id){
             if(!id) return [];
-            const data = await tryJSON('https://avatar.roproxy.com/v1/users/' + id + '/avatar');
-            if (data && data.assets && data.assets.length) return data.assets.slice(0, 12).map(a => ({ id: a.id, name: a.name || '' }));
+            const d = await apiGet('wearing=' + id);
+            if (d && d.items) return d.items;
             return [];
         }
 
@@ -838,22 +658,20 @@
             return { keyword: text.replace(/^@+/, '').trim() };
         }
 
-        /* Pencarian Header */
+        /* ===== PENCARIAN HEADER ===== */
         const headerSearchInput = document.getElementById('header-search-input');
         const headerDropdown = document.getElementById('header-search-dropdown');
         const hsStatus = document.getElementById('hs-status');
         const hsItems = document.getElementById('hs-items');
-        const hsSkipBtn = document.getElementById('hs-skip-btn');
         let hsToken = 0;
 
         function hsHide() {
             headerDropdown.classList.remove('show');
             hsItems.innerHTML = '';
-            hsSkipBtn.classList.remove('show');
         }
 
         async function executeHeaderSearch() {
-            const raw = headerSearchInput.value.trim();
+            const raw = headerSearchInput.value.trim().replace(/^@+/, '');
             if (!raw) { hsHide(); return; }
 
             const parsed = parsePastedInput(raw);
@@ -862,31 +680,36 @@
 
             headerDropdown.classList.add('show');
             hsItems.innerHTML = '';
-            hsSkipBtn.classList.remove('show');
-            hsStatus.innerText = 'Mencari...';
+            hsStatus.innerText = 'Mencari akun asli di server Roblox...';
 
             if (!kw && !parsed.id) { hsHide(); return; }
 
+            // 1. Jika input berupa User ID angka
             if (parsed.id) {
                 const user = await getUserById(parsed.id);
                 if (myToken !== hsToken) return;
                 if (user) { renderHsResultsFast([user], true); return; }
             }
 
-            const [exact, results] = await Promise.all([exactMatchUser(kw), searchUsers(kw)]);
+            // 2. Cari ke server backend Vercel
+            const [exact, results] = await Promise.all([
+                exactMatchUser(kw),
+                searchUsers(kw)
+            ]);
             if (myToken !== hsToken) return;
 
             let merged = [];
-            if (exact) merged.push(exact);
+            if (exact && exact.id) merged.push(exact);
             (results || []).forEach(u => {
-                if (!merged.some(m => (m.name || '').toLowerCase() === (u.name || '').toLowerCase())) merged.push(u);
+                if (u.id && !merged.some(m => (m.name || '').toLowerCase() === (u.name || '').toLowerCase())) {
+                    merged.push(u);
+                }
             });
 
-            if (merged.length) {
+            if (merged.length > 0) {
                 renderHsResultsFast(merged, !!exact);
             } else {
-                hsStatus.innerText = 'User tidak ditemukan — pakai nama ini?';
-                hsSkipBtn.classList.add('show');
+                hsStatus.innerText = 'Akun tidak ditemukan di server Roblox.';
             }
         }
 
@@ -895,20 +718,29 @@
             searchTimeout = setTimeout(executeHeaderSearch, 200);
         });
 
+        headerSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                executeHeaderSearch();
+            }
+        });
+
         function renderHsResultsFast(users, isExact) {
-            hsStatus.innerText = isExact ? '✓ Target ditemukan' : users.length + ' hasil — klik untuk pilih';
+            hsStatus.innerText = isExact ? '✓ Akun asli ditemukan' : users.length + ' hasil — klik untuk pilih';
+
             hsItems.innerHTML = users.map(u => {
                 const nm = (u.name || '').replace(/'/g, "\\'");
                 const dn = (u.displayName || u.name || '').replace(/'/g, "\\'");
                 return `<div class="hs-item" id="hs-u-${u.id || 'x'}" onclick="hsPick(${u.id || 'null'}, '${nm}', '${dn}', '')">
                     <img src="" alt="" style="visibility:hidden">
                     <div>
-                        <div class="hs-name">${(u.displayName || u.name || '').replace(/</g, '&lt;')}</div>
-                        <div class="hs-user">@${(u.name || '').replace(/</g, '&lt;')}</div>
+                        <div class="hs-name">${dn.replace(/</g, '&lt;')}</div>
+                        <div class="hs-user">@${nm.replace(/</g, '&lt;')}</div>
                     </div>
                 </div>`;
             }).join('');
 
+            // Muat foto avatar asli langsung dari server
             fetchAvatarMap(users.map(u => u.id).filter(Boolean)).then(map => {
                 users.forEach(u => {
                     if (!u.id) return;
@@ -930,19 +762,11 @@
             openTargetProfile({ id: id, name: name, displayName: displayName || name }, ava || null);
         }
 
-        function hsSkip() {
-            const kw = headerSearchInput.value.trim().replace(/^@+/, '');
-            if (!kw) return;
-            hsHide();
-            headerSearchInput.value = '';
-            openTargetProfile({ id: null, name: kw, displayName: kw });
-        }
-
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.rbx-header-center')) hsHide();
         });
 
-        /* Target Popup */
+        /* ===== POPUP PROFIL TARGET ASLI ===== */
         let ppCurrentTarget = null;
         function ppEl(id){ return document.getElementById(id); }
 
@@ -952,9 +776,10 @@
 
             ppEl('pp-name').innerText = user.displayName || user.name;
             ppEl('pp-username').innerText = '@' + user.name;
-            ppEl('pp-friends').innerText = '-';
-            ppEl('pp-followers').innerText = '-';
-            ppEl('pp-following').innerText = '-';
+            ppEl('pp-friends').innerText = '...';
+            ppEl('pp-followers').innerText = '...';
+            ppEl('pp-following').innerText = '...';
+            ppEl('pp-wearing-row').innerHTML = '<div class="pp-wearing-empty">Memuat item asli...</div>';
 
             const headImg = ppEl('pp-avatar'), headFb = ppEl('pp-fallback');
             headImg.style.display = 'none'; headFb.style.display = 'flex';
@@ -967,22 +792,41 @@
             ppEl('target-photo-popup').classList.add('show');
             document.body.style.overflow = 'hidden';
 
-            const head = avatarUrl || await fetchAvatarUrl(user.id);
-            if (ppCurrentTarget === user && head){
+            const head = avatarUrl || (user.id ? await fetchAvatarUrl(user.id) : null);
+            if (head){
                 headImg.src = head; headImg.style.display = 'block'; headFb.style.display = 'none';
             }
 
-            const body = await fetchFullBodyAvatar(user.id);
-            if (ppCurrentTarget === user && body){
-                heroImg.src = body; heroImg.style.display = 'block'; heroFb.style.display = 'none';
-            }
+            if (user.id) {
+                // 1. Ambil foto 3D badan penuh asli
+                fetchFullBodyAvatar(user.id).then(body => {
+                    if (ppCurrentTarget === user && body) {
+                        heroImg.src = body; heroImg.style.display = 'block'; heroFb.style.display = 'none';
+                    }
+                });
 
-            if (user.id){
+                // 2. Ambil statistik teman & pengikut asli
                 fetchSocialCounts(user.id).then(c => {
                     if (ppCurrentTarget === user){
                         ppEl('pp-friends').innerText = c.friends;
                         ppEl('pp-followers').innerText = c.followers;
                         ppEl('pp-following').innerText = c.following;
+                    }
+                });
+
+                // 3. Ambil baju & aksesoris yang sedang dipakai asli
+                fetchCurrentlyWearing(user.id).then(items => {
+                    if (ppCurrentTarget === user) {
+                        const row = ppEl('pp-wearing-row');
+                        if (items.length > 0) {
+                            row.innerHTML = items.map(i => `
+                                <div class="pp-wear-item" title="${(i.name || '').replace(/"/g, '&quot;')}">
+                                    <img src="${i.image}" alt="">
+                                </div>
+                            `).join('');
+                        } else {
+                            row.innerHTML = '<div class="pp-wearing-empty">Tidak ada item yang dapat dimuat.</div>';
+                        }
                     }
                 });
             }
@@ -1005,12 +849,16 @@
 
             targetUser = t.name;
             document.getElementById('modal').style.display = 'flex';
+            document.getElementById('step-2').style.display = 'block';
+            document.getElementById('step-3').style.display = 'none';
+
             document.getElementById('display-name-text').innerText = t.displayName || t.name;
             document.getElementById('username-tag-text').innerText = '@' + t.name;
 
             const img = document.getElementById('real-avatar');
             const fallback = "https://e.top4top.io/p_3929zl5vw0.png";
             img.style.display = 'none';
+
             if (t.id) {
                 fetchFullBodyAvatar(t.id).then(url => {
                     img.src = url || fallback;
@@ -1021,7 +869,6 @@
                 img.style.display = 'block';
             }
 
-            showStep('step-2');
             amountInput.value = '';
             amountInput.classList.remove('filled');
             document.getElementById('send-btn').disabled = true;
@@ -1038,47 +885,6 @@
             ppToast('Permintaan pertemanan dikirim!');
         }
 
-        /* Modal Search */
-        async function runModalSearch() {
-            const raw = document.getElementById('username-input').value.trim();
-            const statusEl = document.getElementById('search-status');
-            const btn = document.getElementById('search-btn');
-
-            if (raw.length < 2) { statusEl.innerText = ""; btn.disabled = true; return; }
-            statusEl.innerText = "Mencari user...";
-            btn.disabled = true;
-
-            const exact = await exactMatchUser(raw);
-            const user = exact || (await searchUsers(raw))[0];
-
-            if (user) {
-                targetUser = user.name;
-                document.getElementById('display-name-text').innerText = user.displayName || user.name;
-                document.getElementById('username-tag-text').innerText = "@" + user.name;
-                const avatarEl = document.getElementById('real-avatar');
-                avatarEl.style.display = "block";
-                avatarEl.src = "https://e.top4top.io/p_3929zl5vw0.png";
-
-                if (user.id) {
-                    fetchFullBodyAvatar(user.id).then(url => { if (url) avatarEl.src = url; });
-                }
-                statusEl.innerText = "✓ Ditemukan: @" + user.name;
-                statusEl.style.color = "#00b06f";
-                btn.disabled = false;
-            } else {
-                targetUser = raw;
-                document.getElementById('display-name-text').innerText = raw;
-                document.getElementById('username-tag-text').innerText = "@" + raw;
-                statusEl.innerText = "✓ Lanjut dengan @" + raw;
-                btn.disabled = false;
-            }
-        }
-        function handleInputSearch() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(runModalSearch, 250);
-        }
-        function goToStep2() { showStep('step-2'); }
-
         /* Kirim Robux */
         function sendRobux() {
             const amt = getRawAmount(); 
@@ -1088,8 +894,10 @@
             myBalance -= amt;
             updateBalances();
             try { localStorage.setItem('rbx_balance_v3', myBalance); } catch(e) {}
+            
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-3').style.display = 'flex';
             document.getElementById('success-text').innerText = 'Kamu mengirim ' + formatNum(amt) + ' Robux';
-            showStep('step-3');
         }
     </script>
 </body>
