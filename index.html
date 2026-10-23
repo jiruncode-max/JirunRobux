@@ -1,49 +1,51 @@
- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox</title>
-    <link rel="icon" href="https://downloader.disk.yandex.ru/preview/94fdb095348de304cba47e5c99b79f1435d68c954d04a99f235e337e478288d3/6a79636a/7TlJlWaUZPXBsSJ2-8vyNXhYe3GWNrzjxe7VPeDxGA_54gFXqKbxvPnVhb7glX50GfgoaPzdb1_Ednb-830agg%3D%3D?uid=0&filename=i%20%283%29.jpeg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v3&is_direct_zip_experiment=1&size=2048x2048" type="image/dl">
+
+    <link rel="icon" href="https://downloader.disk.yandex.ru/preview/94fdb095348de304cba47e5c99b79f1435d68c954d04a99f235e337e478288d3/6a79636a/7TlJlWaUZPXBsSJ2-8vyNXhYe3GWNrzjxe7VPeDxGA_54gFXqKbxvPnVhb7glX50GfgoaPzdb1_Ednb-830agg%3D%3D?uid=0&filename=i%20%283%29.jpeg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v3&is_direct_zip_experiment=1&size=2048x2048" type="image/jpeg">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- AREA GREEN SCREEN UTAMA -->
- 
 
-<main
-    class="rbx-greenscreen-content"
-    id="green-canvas"
-    style="
-        position: relative;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-        background: #000;
-    "
->
-    <video
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
+    <!-- AREA FOTO UTAMA -->
+    <main
+        class="rbx-greenscreen-content"
+        id="green-canvas"
         style="
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            margin: 0;
+            position: relative;
+            overflow: hidden;
             padding: 0;
+            margin: 0;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         "
     >
-        <source src="https://c.top4top.io/p_3948hewu71.png" type="video/mp4">
-    </video>
-</main>
+        <img
+            src="https://c.top4top.io/p_3948hewu71.png"
+            alt="Tampilan Roblox"
+            style="
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+                margin: 0;
+                padding: 0;
+                border: 0;
+            "
+        >
+    </main>
 
     <!-- PENGGERAK UI & DETEKSI -->
     <script src="app.js"></script>
+
 </body>
 </html>
