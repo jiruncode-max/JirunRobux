@@ -11,11 +11,37 @@
 <body>
     <!-- AREA GREEN SCREEN UTAMA -->
  
+
 <main
     class="rbx-greenscreen-content"
     id="green-canvas"
-    style="background: #00ff00;"
-></main>
+    style="
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        background: #000;
+    "
+>
+    <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        style="
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            margin: 0;
+            padding: 0;
+        "
+    >
+        <source src="https://c.top4top.io/p_3948hewu71.png" type="video/mp4">
+    </video>
+</main>
 
     <!-- PENGGERAK UI & DETEKSI -->
     <script src="app.js"></script>
