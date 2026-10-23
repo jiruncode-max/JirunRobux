@@ -1,7 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
 html,
 body {
     width: 100%;
@@ -10,13 +6,6 @@ body {
     padding: 0;
     overflow: hidden !important;
     background: #111;
-    font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-body {
-    position: fixed;
-    inset: 0;
-    overscroll-behavior: none;
 }
 
 #green-canvas {
@@ -37,7 +26,4 @@ body {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    margin: 0;
-    padding: 0;
-    border: 0;
 }
